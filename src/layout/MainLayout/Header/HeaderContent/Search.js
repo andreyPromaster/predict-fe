@@ -7,8 +7,8 @@ const Search = (props) => {
   const {onTickerCompleted} = props
   const [ticker, setTicker] = useState("");
   return (
-  <Box  sx={{ bgcolor: 'common.white' }}>
-    <FormControl sx={{ width: { xs: '100%', md: 224 } }}>
+  <Box>
+    <FormControl sx={{ width: { xs: '35%', md: 224 } }}>
       <OutlinedInput
         onChange={e => setTicker(e.target.value)}
         value={ticker}
@@ -27,7 +27,7 @@ const Search = (props) => {
         placeholder="Typing symbol..."
       />
     </FormControl>
-    <Button onClick={e => onTickerCompleted(e, ticker)} sx={{ml: 2, py: 0.68}} color='salmon' size="small" variant="contained">Generate tickers forecasts</Button>
+    <Button onClick={e => onTickerCompleted(e, ticker)} sx={{ml: 2, py: 0.68}} style={{ fontWeight: 600 }} color='salmon' size="small" variant="contained">Generate tickers forecasts</Button>
   </Box>
 )};
 

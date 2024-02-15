@@ -155,7 +155,7 @@ export default function PredictTable(props) {
                 >
                   <TableCell component="th" id={labelId} scope="row" align="left">{row.symbol}</TableCell>
                   <TableCell align="right">{row.marketCap}</TableCell>
-                  <TableCell align="right">{row.price}</TableCell>
+                  <TableCell align="right">{row.price.toFixed(5)}</TableCell>
                   <TableCell sx={{ bgcolor: colorCellFromValue(row.w_high_0_1.toFixed(5)) }} align="right">{row.w_high_0_1.toFixed(5)}</TableCell>
                   <TableCell sx={{ bgcolor: colorCellFromValue(row.w_high_1_2.toFixed(5)) }} align="right">{row.w_high_1_2.toFixed(5)}</TableCell>
                   <TableCell sx={{ bgcolor: colorCellFromValue(row.w_high_2_5.toFixed(5)) }} align="right">{row.w_high_2_5.toFixed(5)}</TableCell>

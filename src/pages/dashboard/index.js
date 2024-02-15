@@ -89,7 +89,7 @@ const DashboardDefault = () => {
       if (timeframe !== '1min') {
         filters.timeframe = timeframe
       }
-      fetchTickerData(symbol.toUpperCase(), filters).then(([{ data: candlesticks }, { data: profile }, { data: trendsForecasts }, { data: categoricalForecasts }]) => {
+      fetchTickerData(symbol.trim().toUpperCase(), filters).then(([{ data: candlesticks }, { data: profile }, { data: trendsForecasts }, { data: categoricalForecasts }]) => {
         const payload = {candlesticks, profile, trendsForecasts, categoricalForecasts}
         dispatch(tickerDataUploaded(payload))
         setTicker(symbol)
@@ -113,6 +113,9 @@ const DashboardDefault = () => {
         <Grid item xs={12} sx={{ mb: -2.25 }}>
           <Typography variant="h5">Dashboard {profile.companyName}</Typography>
         </Grid>
+        <Grid item xs={12}>
+          <Search onTickerCompleted={onTickerCompleted}></Search>
+        </Grid>
         <Grid item xs={12} sm={6} md={4} lg={3} >
           <WeeklyPredictCard />
         </Grid>
@@ -122,7 +125,7 @@ const DashboardDefault = () => {
         <Grid item md={4} lg={6} sx={{ display: { sm: 'none', md: 'block', lg: 'block' } }} />
         <Grid item xs={11} >
           {Object.keys(profile).length !== 0 &&
-            <Breadcrumbs sx={{ color: 'text.secondary' }} aria-label="breadcrumb">
+            <Breadcrumbs sx={{ mb:1, color: 'text.secondary' }} aria-label="breadcrumb">
               <Typography variant="h6">Exchange: {profile.exchange}</Typography>
               <Typography variant="h6">Industry: {profile.industry}</Typography>
               <Typography variant="h6">Sector: {profile.sector}</Typography>
@@ -137,10 +140,7 @@ const DashboardDefault = () => {
             </Breadcrumbs>}
           <Grid container alignItems="center" justifyContent="space-between">
             <Grid item>
-              <Search onTickerCompleted={onTickerCompleted}></Search>
-            </Grid>
-            <Grid item>
-              <Stack direction="row" alignItems="center" spacing={0}>
+              <Stack direction="row" alignItems="center" spacing={0} useFlexGap flexWrap="wrap">
               <Chip label="Timeframe:"   sx={{ mr: 1}} />
                 <TextField
                   id="standard-select-timeframe"
@@ -198,6 +198,8 @@ const DashboardDefault = () => {
             </Box>
           </MainCard>
         </Grid>
+        <Grid item xs={1}  sx={{ display: { xs: 'block', sm: 'none', md: 'none', lg: 'none' } }} />
+
       </Grid>
     </>
   );

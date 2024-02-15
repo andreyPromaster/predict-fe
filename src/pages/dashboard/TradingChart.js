@@ -28,6 +28,9 @@ export const TradingChart = props => {
                 timeScale: {
                     timeVisible: true,
                 },
+                localization: {
+                    locale: 'en-US',
+               },
             });
             let isShowMarker = false;
             const volumeSeries = chart.addHistogramSeries({
@@ -74,6 +77,7 @@ export const TradingChart = props => {
                     value: 0
                 })
             }
+            if (Object.keys(props.trends).length !== 0){
             switch (props.predictMode) {
                 case "day":{
                     series.createPriceLine({
@@ -111,12 +115,12 @@ export const TradingChart = props => {
                     axisLabelVisible: true,
                     title: 'max price',
                 });
-                const currentDate = moment.utc(props.trends.date);
-                const nextDate = moment(currentDate).add(7, "days")
-                for(currentDate.add(1, "days"); currentDate<nextDate; currentDate.add(1, "days")){
-                    histData.push({time: currentDate.unix()})
-                }                
-                isShowMarker = true
+                // const currentDate = moment.utc(props.trends.date);
+                // const nextDate = moment(currentDate).add(7, "days")
+                // for(currentDate.add(1, "days"); currentDate<nextDate; currentDate.add(1, "days")){
+                //     histData.push({time: currentDate.unix()})
+                // }                
+                // isShowMarker = true
             }
                     break; 
                 case "month": {
@@ -213,6 +217,7 @@ export const TradingChart = props => {
                 }
                     break; 
             }
+        }
             volumeSeries.setData(histData)
             series.setData(histData)
             if (isShowMarker){

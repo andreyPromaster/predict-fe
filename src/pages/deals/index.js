@@ -11,6 +11,7 @@ import { FileAddOutlined } from '@ant-design/icons';
 import { TOP_WEEKLY_PREDIT_URL_EXCEL } from '../../api/Urls'
 import { useSelector, useDispatch } from 'react-redux';
 import { tickerTopDealsUploaded } from '../../store/reducers/ticker'
+import moment from "moment/moment";
 
 const Deals = () => {
     const dispatch = useDispatch()
@@ -33,11 +34,11 @@ const Deals = () => {
                     <Typography variant="h5">The top of weekly predicts</Typography>
                 </Grid>
                 <Grid item lg={3}>
-                    {predicts.length !== 0 && <Typography variant="h5">Updated: {predicts[0].start_date}</Typography>}
+                    {predicts.length !== 0 && <Typography variant="h5">Updated: {moment(predicts[0].forecast_timestamp).format('DD/MM/YYYY')}</Typography>}
                 </Grid>
             </Grid>
 
-            <Grid item>
+            <Grid item xs={12}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <MainCard sx={{ mt: 2 }} content={false}>
                         <PredictTable predicts={predicts} />
