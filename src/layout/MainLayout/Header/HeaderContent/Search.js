@@ -16,7 +16,7 @@ const Search = (props) => {
         size="small"
         id="header-search"
         startAdornment={
-          <InputAdornment position="start" sx={{ mr: -0.5 }}>
+          <InputAdornment position="start" sx={{ mr: 0 }}>
             <SearchOutlined />
           </InputAdornment>
         }
@@ -27,7 +27,7 @@ const Search = (props) => {
         placeholder="Typing symbol..."
       />
     </FormControl>
-    <Button onClick={e => onTickerCompleted(e, ticker)} sx={{ml: 2, py: 0.68}} style={{ fontWeight: 600 }} color='salmon' size="small" variant="contained">Generate tickers forecasts</Button>
+    <Button onClick={e => onTickerCompleted(e, ticker)} sx={{ml: 2, py: 0.68}} style={{ fontWeight: 600 }} color='predictButton' size="small" variant="contained">Generate tickers forecasts</Button>
   </Box>
 )};
 

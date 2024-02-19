@@ -114,12 +114,11 @@ export default function PredictTable(props) {
   const colorCellFromValue = (value, midpoint = 60) => {
     const getColorIndex = Math.round(midpoint * value);
     const gradientArray = new Gradient()
-      .setColorGradient("#ffffb2", "#fecc5c", "#fd8d3c", "#f03b20", "#bd0026")
+      .setColorGradient("#2F3E66", "#0570b0", "#74a9cf", "#a6bddb")
       .setMidpoint(midpoint)
     return gradientArray.getColor(getColorIndex === 0 ? 0.01 : getColorIndex);
   };
   return (
-    <Box>
       <TableContainer
         sx={{
           width: '100%',
@@ -173,6 +172,5 @@ export default function PredictTable(props) {
           </TableBody>
         </Table>
       </TableContainer>
-    </Box>
   );
 }

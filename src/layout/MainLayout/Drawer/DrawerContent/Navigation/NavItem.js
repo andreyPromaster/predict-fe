@@ -45,8 +45,8 @@ const NavItem = ({ item, level }) => {
     // eslint-disable-next-line
   }, [pathname]);
 
-  const textColor = 'text.primary';
-  const iconSelectedColor = 'primary.main';
+  const textColor = 'white';
+  const iconSelectedColor = 'white';
 
   return (
     <ListItemButton
@@ -60,15 +60,15 @@ const NavItem = ({ item, level }) => {
         py: !drawerOpen && level === 1 ? 1.25 : 1,
         ...(drawerOpen && {
           '&:hover': {
-            bgcolor: 'primary.lighter'
+            bgcolor: 'primary.darker'
           },
           '&.Mui-selected': {
-            bgcolor: 'primary.lighter',
+            bgcolor: 'primary.900',
             borderRight: `2px solid ${theme.palette.primary.main}`,
             color: iconSelectedColor,
             '&:hover': {
               color: iconSelectedColor,
-              bgcolor: 'primary.lighter'
+              bgcolor: 'primary.darker'
             }
           }
         }),

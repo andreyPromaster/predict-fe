@@ -13,7 +13,6 @@ const columnChartOptions = {
   plotOptions: {
     bar: {
       columnWidth: '60%',
-      borderRadius: 4
     }
   },
   dataLabels: {
@@ -39,9 +38,6 @@ const MonthsPredictBar = () => {
   const theme = useTheme();
   const { primary, secondary } = theme.palette.text;
   const line = theme.palette.divider;
-
-  const warning = theme.palette.warning.main;
-  const primaryMain = theme.palette.primary.main;
   const charSuccess = theme.palette.success.light;
   const [options, setOptions] = useState(columnChartOptions);
   const series = [];
@@ -68,7 +64,7 @@ const MonthsPredictBar = () => {
   useEffect(() => {
     setOptions((prevState) => ({
       ...prevState,
-      colors: [charSuccess, primaryMain],
+      colors: [charSuccess, '#4375ff'],
       xaxis: {
         labels: {
           style: {
@@ -91,7 +87,7 @@ const MonthsPredictBar = () => {
       },  
       },
       tooltip: {
-        theme: 'light'
+        theme:'dark'
       },
       legend: {
         position: 'top',
@@ -101,7 +97,7 @@ const MonthsPredictBar = () => {
         }
       }
     }));
-  }, [primary, secondary, line, warning, primaryMain]);
+  }, [primary, secondary, line]);
 
   return (
     <div id="chart">

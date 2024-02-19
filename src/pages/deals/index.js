@@ -38,7 +38,7 @@ const Deals = () => {
                 </Grid>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} md={12} lg={12}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <MainCard sx={{ mt: 2 }} content={false}>
                         <PredictTable predicts={predicts} />

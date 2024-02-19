@@ -4,7 +4,7 @@ import MonthsPredictBar from '../../pages/dashboard/MonthsPredictBar';
 
 
 const MonthlyPredictCard = () => (
-    <MainCard contentSX={{ p: 1}}>
+    <MainCard sx={{minHeight: '220px'}} contentSX={{ p: 1}}>
       <Stack spacing={0.5}>
         <Typography variant="h6" color="textSecondary">
           1 month / 3 month predicts

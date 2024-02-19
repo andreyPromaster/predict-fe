@@ -41,30 +41,30 @@ const Palette = (mode) => {
       },
       ...paletteColor,
       text: {
-        primary: paletteColor.grey[700],
-        secondary: paletteColor.grey[500],
+        primary: "#FFFFFF",
+        secondary: paletteColor.grey[200],
         disabled: paletteColor.grey[400]
       },
       action: {
         disabled: paletteColor.grey[300]
       },
-      divider: paletteColor.grey[200],
+      // divider: paletteColor.grey[200],
       background: {
-        paper: paletteColor.grey[0],
-        default: paletteColor.grey.A50
+        paper: paletteColor.backgrounds.card,
+        default: paletteColor.backgrounds.main
       },
+      selectedPredict:{
+        main: '#FFFFFF'
+      },
+      defaultPredict:{
+        main: paletteColor.grey[400]
+      },
+      predictButton:{
+        main: paletteColor.primary.main,
+        dark: paletteColor.primary.main
+      },
+
     }
-  });
-  theme = createTheme(theme, {
-    // Custom colors created with augmentColor go here
-    palette: {
-      salmon: theme.palette.augmentColor({
-        color: {
-          main: paletteColor.error.button,
-        },
-        name: 'salmon',
-      }),
-    },
   });
   return theme
 };

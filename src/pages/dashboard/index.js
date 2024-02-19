@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { fetchTickerData, fetchGraphData } from "api/Tickers"
 // material-ui
 import {
-  Breadcrumbs,
+  List ,ListItem ,ListItemText ,
   Button,
   Grid,
   Chip,
@@ -107,7 +107,7 @@ const DashboardDefault = () => {
 
   return (
     <>
-      <Grid container rowSpacing={4.5} columnSpacing={2.75}>
+      <Grid container rowSpacing={2.5} columnSpacing={2.75}>
         <Notification message={errorMessage} />
         {/* row 1 */}
         <Grid item xs={12} sx={{ mb: -2.25 }}>
@@ -122,22 +122,48 @@ const DashboardDefault = () => {
         <Grid item xs={12} sm={6} md={4} lg={3} >
           <MonthlyPredictCard />
         </Grid>
-        <Grid item md={4} lg={6} sx={{ display: { sm: 'none', md: 'block', lg: 'block' } }} />
-        <Grid item xs={11} >
-          {Object.keys(profile).length !== 0 &&
-            <Breadcrumbs sx={{ mb:1, color: 'text.secondary' }} aria-label="breadcrumb">
-              <Typography variant="h6">Exchange: {profile.exchange}</Typography>
-              <Typography variant="h6">Industry: {profile.industry}</Typography>
-              <Typography variant="h6">Sector: {profile.sector}</Typography>
-              <Typography variant="h6">Country: {profile.country}</Typography>
-              <Typography variant="h6">IPO date: {profile.ipoDate}</Typography>
-              <Link href={`https://www.sec.gov/edgar/browse/?CIK=${parseInt(profile.cik)}`} rel="noreferrer" target="_blank" underline="hover">
-                CIK number
-              </Link>
-              <Link href={profile.website} rel="noreferrer" target="_blank" underline="hover">
-                Company website
-              </Link>
-            </Breadcrumbs>}
+        <Grid item xs={12} md={4} lg={4} >
+        {Object.keys(profile).length !== 0 &&
+        <MainCard sx={{minHeight: '220px'}} contentSX={{ p: 2}}>
+            <List disablePadding={true} dense={false}>
+              <ListItem disablePadding={true}>
+                <ListItemText
+                  primary={`Exchange:   ${profile.exchange}`}
+                />
+              </ListItem>
+              <ListItem disablePadding={true}>
+                <ListItemText
+                  primary={`Industry:   ${profile.industry}`}
+                />
+              </ListItem>
+              <ListItem disablePadding={true}>
+                <ListItemText
+                  primary={`Sector:   ${profile.sector}`}
+                />
+              </ListItem>
+              <ListItem disablePadding={true}>
+                <ListItemText
+                  primary={`Country:   ${profile.country}`} 
+                />
+              </ListItem>
+              <ListItem disablePadding={true}>
+                <ListItemText
+                  primary={`IPO date:   ${profile.ipoDate}`}
+                />
+              </ListItem>
+              <ListItem disablePadding={true}>
+                <Link href={`https://www.sec.gov/edgar/browse/?CIK=${parseInt(profile.cik)}`} color="inherit" rel="noreferrer" underline="always" target="_blank">
+                  CIK EDGAR 
+                </Link>
+                <Link sx={{ml:1}} href={profile.website} color="inherit" rel="noreferrer" target="_blank" underline="always">
+                  Company website
+                </Link>
+              </ListItem>
+            </List>
+            </MainCard>
+          }
+        </Grid>
+        <Grid item xs={11}>
           <Grid container alignItems="center" justifyContent="space-between">
             <Grid item>
               <Stack direction="row" alignItems="center" spacing={0} useFlexGap flexWrap="wrap">
@@ -148,7 +174,8 @@ const DashboardDefault = () => {
                   select
                   value={timeframe}
                   onChange={(e) => onTimeframeChanged(e.target.value)}
-                  sx={{ mr: 1, '& .MuiInputBase-input': { py: 0.68, fontSize: '0.875rem' } }}
+                  sx={{ mr: 1, boxShadow: 'none','& .MuiInputBase-input': { py: 0.68, fontSize: '0.875rem',},
+                }}
                 >
                   {timeframes.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
@@ -160,7 +187,7 @@ const DashboardDefault = () => {
                 <Button
                   size="small"
                   onClick={() => setSlot('day')}
-                  color={slot === 'day' ? 'primary' : 'secondary'}
+                  color={slot === 'day' ? 'selectedPredict' : 'defaultPredict'}
                   variant={slot === 'day' ? 'outlined' : 'text'}
                 >
                   Day
@@ -168,7 +195,7 @@ const DashboardDefault = () => {
                 <Button
                   size="small"
                   onClick={() => setSlot('week')}
-                  color={slot === 'week' ? 'primary' : 'secondary'}
+                  color={slot === 'week' ? 'selectedPredict' : 'defaultPredict'}
                   variant={slot === 'week' ? 'outlined' : 'text'}
                 >
                   Week
@@ -176,7 +203,7 @@ const DashboardDefault = () => {
                 <Button
                   size="small"
                   onClick={() => setSlot('month')}
-                  color={slot === 'month' ? 'primary' : 'secondary'}
+                  color={slot === 'month' ? 'selectedPredict' : 'defaultPredict'}
                   variant={slot === 'month' ? 'outlined' : 'text'}
                 >
                   Month
@@ -184,7 +211,7 @@ const DashboardDefault = () => {
                 <Button
                   size="small"
                   onClick={() => setSlot('3months')}
-                  color={slot === '3months' ? 'primary' : 'secondary'}
+                  color={slot === '3months' ? 'selectedPredict' : 'defaultPredict'}
                   variant={slot === '3months' ? 'outlined' : 'text'}
                 >
                   3 Months

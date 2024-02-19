@@ -7,21 +7,27 @@ export const TradingChart = props => {
     const {
         data,
         colors: {
-            backgroundColor = 'white',
-            textColor = 'black',
+            backgroundColor = '#2F3E66',
+            textColor = 'white',
         } = {},
     } = props;
     const chartContainerRef = useRef();
+    const chart = useRef();
+    const resizeObserver = useRef();
 
     useEffect(
         () => {
             const handleResize = () => {
-                chart.applyOptions({ width: chartContainerRef.current.clientWidth });
+                chart.current.applyOptions({ width: chartContainerRef.current.clientWidth });
             };
-            const chart = createChart(chartContainerRef.current, {
+            chart.current = createChart(chartContainerRef.current, {
                 layout: {
                     background: { type: ColorType.Solid, color: backgroundColor },
                     textColor,
+                },
+                grid: {
+                    vertLines: { color: '#CCD0D1' },
+                    horzLines: { color: '#CCD0D1' },
                 },
                 // autoSize: true,
                 height: 450,
@@ -33,7 +39,7 @@ export const TradingChart = props => {
                },
             });
             let isShowMarker = false;
-            const volumeSeries = chart.addHistogramSeries({
+            const volumeSeries = chart.current.addHistogramSeries({
                 color: '#26a69a',
                 priceFormat: {
                     type: 'volume',
@@ -50,7 +56,7 @@ export const TradingChart = props => {
                     bottom: 0,
                 },
             });
-            const series = chart.addCandlestickSeries({
+            const series = chart.current.addCandlestickSeries({
                 upColor: '#26a69a', downColor: '#ef5350', borderVisible: false,
                 wickUpColor: '#26a69a', wickDownColor: '#ef5350',
             });
@@ -82,16 +88,16 @@ export const TradingChart = props => {
                 case "day":{
                     series.createPriceLine({
                         price: props.trends.open * props.trends.predict_delta_min_1d,
-                        color: '#ef5350',
-                        lineWidth: 2,
+                        color: '#ffcf40',
+                        lineWidth: 3,
                         lineStyle: 2, // LineStyle.Dashed
                         axisLabelVisible: true,
                         title: 'min price',
                     });
                     series.createPriceLine({
                         price: props.trends.open * props.trends.predict_delta_max_1d,
-                        color: '#26a69a',
-                        lineWidth: 2,
+                        color: '#ffcf40',
+                        lineWidth: 3,
                         lineStyle: 2, // LineStyle.Dashed
                         axisLabelVisible: true,
                         title: 'max price',
@@ -101,16 +107,16 @@ export const TradingChart = props => {
                 case "week": {
                 series.createPriceLine({
                     price: props.trends.open * props.trends.predict_delta_min_1w,
-                    color: '#ef5350',
-                    lineWidth: 2,
+                    color: '#ffcf40',
+                    lineWidth: 3,
                     lineStyle: 2, // LineStyle.Dashed
                     axisLabelVisible: true,
                     title: 'min price',
                 });
                 series.createPriceLine({
                     price: props.trends.open * props.trends.predict_delta_max_1w,
-                    color: '#26a69a',
-                    lineWidth: 2,
+                    color: '#ffcf40',
+                    lineWidth: 3,
                     lineStyle: 2, // LineStyle.Dashed
                     axisLabelVisible: true,
                     title: 'max price',
@@ -131,20 +137,20 @@ export const TradingChart = props => {
                         emptyDates.push({time: date.format('YYYY-MM-DD')})
                     }
                     const nextMonthDate = nextMonth.format('YYYY-MM-DD');
-                    const line1 = chart.addLineSeries(
+                    const line1 = chart.current.addLineSeries(
                         {
-                        color: '#2962FF',
-                        lineWidth: 2,
+                        color: '#ffcf40',
+                        lineWidth: 3,
                     })
-                    const line2 = chart.addLineSeries(
+                    const line2 = chart.current.addLineSeries(
                         {
-                        color: '#2962FF',
-                        lineWidth: 2,
+                        color: '#ffcf40',
+                        lineWidth: 3,
                     })
-                    const line3 = chart.addLineSeries(
+                    const line3 = chart.current.addLineSeries(
                         {
-                        color: '#2962FF',
-                        lineWidth: 2,
+                        color: '#ffcf40',
+                        lineWidth: 3,
                     })
                     const fp_1m = props.trends.predict_b_1m * props.trends.open;
                     const fp_high_1m = fp_1m + 2 * fp_1m * props.trends["predict_err/b_1m"]
@@ -178,20 +184,20 @@ export const TradingChart = props => {
                         emptyDates.push({time: date.format('YYYY-MM-DD')})
                     }
                     const nextMonthDate = nextMonth.format('YYYY-MM-DD');
-                    const line1 = chart.addLineSeries(
+                    const line1 = chart.current.addLineSeries(
                         {
-                        color: '#2962FF',
-                        lineWidth: 2,
+                        color: '#ffcf40',
+                        lineWidth: 3,
                     })
-                    const line2 = chart.addLineSeries(
+                    const line2 = chart.current.addLineSeries(
                         {
-                        color: '#2962FF',
-                        lineWidth: 2,
+                        color: '#ffcf40',
+                        lineWidth: 3,
                     })
-                    const line3 = chart.addLineSeries(
+                    const line3 = chart.current.addLineSeries(
                         {
-                        color: '#2962FF',
-                        lineWidth: 2,
+                        color: '#ffcf40',
+                        lineWidth: 3,
                     })
                     const fp_3m = props.trends.predict_b_3m * props.trends.open;
                     const fp_high_3m = fp_3m + 2 * fp_3m * props.trends["predict_err/b_3m"]
@@ -218,8 +224,20 @@ export const TradingChart = props => {
                     break; 
             }
         }
-            volumeSeries.setData(histData)
             series.setData(histData)
+            const volumeData = data.map((e) => {
+                const d = moment.utc(e.date);
+                return {
+                  time: d.unix(),
+                  value: e.volume,
+                  color: e.open < e.close ? '#26a69a'  : '#ef5350',
+                  open: e.open,
+                  high: e.high,
+                  close: e.close,
+                  low: e.low,
+                }
+            });
+            volumeSeries.setData(volumeData)
             if (isShowMarker){
             series.setMarkers([
                 {
@@ -237,21 +255,28 @@ export const TradingChart = props => {
             //     chart.applyOptions({ height: newRect.height, width: newRect.width });
             //   }).observe(chartContainerRef.current);
 
-            chart.timeScale().fitContent();
+            chart.current.timeScale().fitContent();
             window.addEventListener('resize', handleResize);
 
             return () => {
                 window.removeEventListener('resize', handleResize);
-                chart.remove();
+                chart.current.remove();
             };
         },
         [data, props.predictMode]
     );
     useEffect(() => {
-        console.log(1)
-        setTimeout(()=>{window.dispatchEvent(new Event('resize'));}, 700)
+        resizeObserver.current = new ResizeObserver((entries) => {
+          const { width, height } = entries[0].contentRect;
+          chart.current.applyOptions({ width, height });
+          setTimeout(() => {
+            chart.current.timeScale().fitContent();
+          }, 0);
+        });
+        resizeObserver.current.observe(chartContainerRef.current);
+        return () => {resizeObserver.current.disconnect();}
+      }, []);
 
-      }, )
     return (
         <div
             ref={chartContainerRef}

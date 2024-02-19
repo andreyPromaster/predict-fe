@@ -4,7 +4,7 @@ import WeeklyPredictBar from '../../pages/dashboard/WeeklyPredictBar';
 
 
 const WeeklyPredictCard = () => (
-    <MainCard contentSX={{ p: 1}}>
+    <MainCard sx={{minHeight: '220px'}} contentSX={{ p: 1}}>
       <Stack spacing={0.5}>
         <Typography variant="h6" color="textSecondary">
           Weekly predicts

@@ -18,8 +18,11 @@ const columnChartOptions = {
   plotOptions: {
     bar: {
       columnWidth: '20%',
-      borderRadius: 4
     }
+  },
+  tooltip:{
+    enabled: true,
+    theme:'dark'
   },
   dataLabels: {
     enabled: false
@@ -96,7 +99,7 @@ const WeeklyPredictBar = () => {
       },  
       },
       tooltip: {
-        theme: 'light'
+        theme:'dark'
       },
       legend: {
         position: 'top',

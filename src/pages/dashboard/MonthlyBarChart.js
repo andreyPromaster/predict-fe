@@ -18,7 +18,6 @@ const barChartOptions = {
   plotOptions: {
     bar: {
       columnWidth: '45%',
-      borderRadius: 4
     }
   },
   dataLabels: {

@@ -86,7 +86,11 @@ const Theme = (colors) => {
       darker: green[9],
       contrastText
     },
-    grey: greyColors
+    grey: greyColors,
+    backgrounds:{
+      main: '#253051',
+      card: '#2F3E66'
+    }
   };
 };
 
