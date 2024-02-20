@@ -163,7 +163,7 @@ const DashboardDefault = () => {
             </MainCard>
           }
         </Grid>
-        <Grid item xs={11}>
+        <Grid item xs={12}>
           <Grid container alignItems="center" justifyContent="space-between">
             <Grid item>
               <Stack direction="row" alignItems="center" spacing={0} useFlexGap flexWrap="wrap">

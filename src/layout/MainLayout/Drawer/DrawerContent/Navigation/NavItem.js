@@ -102,9 +102,9 @@ const NavItem = ({ item, level }) => {
             }),
             ...(!drawerOpen &&
               isSelected && {
-                bgcolor: 'primary.lighter',
+                bgcolor: 'primary.900',
                 '&:hover': {
-                  bgcolor: 'primary.lighter'
+                  bgcolor: 'primary.900'
                 }
               })
           }}
