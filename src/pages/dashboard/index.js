@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { fetchTickerData, fetchGraphData } from "api/Tickers"
 // material-ui
 import {
-  List ,ListItem ,ListItemText ,
+  List, ListItem, ListItemText,
   Button,
   Grid,
   Chip,
@@ -14,7 +14,7 @@ import {
   Box
 } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import {tickerCandlesticksUploaded, tickerDataUploaded} from '../../store/reducers/ticker'
+import { tickerCandlesticksUploaded, tickerDataUploaded } from '../../store/reducers/ticker'
 // project import
 import MainCard from 'components/MainCard';
 import Search from '../../layout/MainLayout/Header/HeaderContent/Search';
@@ -60,7 +60,6 @@ const DashboardDefault = () => {
   const [ticker, setTicker] = useState("");
   const [errorMessage, setErrorMessage] = useState('');
 
-  const isOpen = useSelector((state) => state.menu.drawerOpen)
   const profile = useSelector((state) => state.ticker.profile)
   const trendsForecasts = useSelector((state) => state.ticker.trendsForecasts)
   const candlesticks = useSelector((state) => state.ticker.candlesticks)
@@ -90,7 +89,7 @@ const DashboardDefault = () => {
         filters.timeframe = timeframe
       }
       fetchTickerData(symbol.trim().toUpperCase(), filters).then(([{ data: candlesticks }, { data: profile }, { data: trendsForecasts }, { data: categoricalForecasts }]) => {
-        const payload = {candlesticks, profile, trendsForecasts, categoricalForecasts}
+        const payload = { candlesticks, profile, trendsForecasts, categoricalForecasts }
         dispatch(tickerDataUploaded(payload))
         setTicker(symbol)
       }).catch((error) => {
@@ -123,43 +122,43 @@ const DashboardDefault = () => {
           <MonthlyPredictCard />
         </Grid>
         <Grid item xs={12} md={4} lg={4} >
-        {Object.keys(profile).length !== 0 &&
-        <MainCard sx={{minHeight: '220px'}} contentSX={{ p: 2}}>
-            <List disablePadding={true} dense={false}>
-              <ListItem disablePadding={true}>
-                <ListItemText
-                  primary={`Exchange:   ${profile.exchange}`}
-                />
-              </ListItem>
-              <ListItem disablePadding={true}>
-                <ListItemText
-                  primary={`Industry:   ${profile.industry}`}
-                />
-              </ListItem>
-              <ListItem disablePadding={true}>
-                <ListItemText
-                  primary={`Sector:   ${profile.sector}`}
-                />
-              </ListItem>
-              <ListItem disablePadding={true}>
-                <ListItemText
-                  primary={`Country:   ${profile.country}`} 
-                />
-              </ListItem>
-              <ListItem disablePadding={true}>
-                <ListItemText
-                  primary={`IPO date:   ${profile.ipoDate}`}
-                />
-              </ListItem>
-              <ListItem disablePadding={true}>
-                <Link href={`https://www.sec.gov/edgar/browse/?CIK=${parseInt(profile.cik)}`} color="inherit" rel="noreferrer" underline="always" target="_blank">
-                  CIK EDGAR 
-                </Link>
-                <Link sx={{ml:1}} href={profile.website} color="inherit" rel="noreferrer" target="_blank" underline="always">
-                  Company website
-                </Link>
-              </ListItem>
-            </List>
+          {Object.keys(profile).length !== 0 &&
+            <MainCard sx={{ minHeight: '220px' }} contentSX={{ p: 2 }}>
+              <List disablePadding={true} dense={false}>
+                <ListItem disablePadding={true}>
+                  <ListItemText
+                    primary={`Exchange:   ${profile.exchange}`}
+                  />
+                </ListItem>
+                <ListItem disablePadding={true}>
+                  <ListItemText
+                    primary={`Industry:   ${profile.industry}`}
+                  />
+                </ListItem>
+                <ListItem disablePadding={true}>
+                  <ListItemText
+                    primary={`Sector:   ${profile.sector}`}
+                  />
+                </ListItem>
+                <ListItem disablePadding={true}>
+                  <ListItemText
+                    primary={`Country:   ${profile.country}`}
+                  />
+                </ListItem>
+                <ListItem disablePadding={true}>
+                  <ListItemText
+                    primary={`IPO date:   ${profile.ipoDate}`}
+                  />
+                </ListItem>
+                <ListItem disablePadding={true}>
+                  <Link href={`https://www.sec.gov/edgar/browse/?CIK=${parseInt(profile.cik)}`} color="inherit" rel="noreferrer" underline="always" target="_blank">
+                    CIK EDGAR
+                  </Link>
+                  <Link sx={{ ml: 1 }} href={profile.website} color="inherit" rel="noreferrer" target="_blank" underline="always">
+                    Company website
+                  </Link>
+                </ListItem>
+              </List>
             </MainCard>
           }
         </Grid>
@@ -167,15 +166,16 @@ const DashboardDefault = () => {
           <Grid container alignItems="center" justifyContent="space-between">
             <Grid item>
               <Stack direction="row" alignItems="center" spacing={0} useFlexGap flexWrap="wrap">
-              <Chip label="Timeframe:"   sx={{ mr: 1}} />
+                <Chip label="Timeframe:" sx={{ mr: 1 }} />
                 <TextField
                   id="standard-select-timeframe"
                   size="small"
                   select
                   value={timeframe}
-                  onChange={(e) => onTimeframeChanged(e.target.value)}
-                  sx={{ mr: 1, boxShadow: 'none','& .MuiInputBase-input': { py: 0.68, fontSize: '0.875rem',},
-                }}
+                  onChange={(e) => { e.preventDefault(); onTimeframeChanged(e.target.value) }}
+                  sx={{
+                    mr: 1, boxShadow: 'none', '& .MuiInputBase-input': { py: 0.68, fontSize: '0.875rem', },
+                  }}
                 >
                   {timeframes.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
@@ -183,10 +183,10 @@ const DashboardDefault = () => {
                     </MenuItem>
                   ))}
                 </TextField>
-                <Chip label="Predict prediod:" sx={{ mr: 1}} />
+                <Chip label="Predict prediod:" sx={{ mr: 1 }} />
                 <Button
                   size="small"
-                  onClick={() => setSlot('day')}
+                  onClick={(event) => { event.preventDefault(); setSlot('day'); }}
                   color={slot === 'day' ? 'selectedPredict' : 'defaultPredict'}
                   variant={slot === 'day' ? 'outlined' : 'text'}
                 >
@@ -194,7 +194,7 @@ const DashboardDefault = () => {
                 </Button>
                 <Button
                   size="small"
-                  onClick={() => setSlot('week')}
+                  onClick={(event) => { event.preventDefault(); setSlot('week') }}
                   color={slot === 'week' ? 'selectedPredict' : 'defaultPredict'}
                   variant={slot === 'week' ? 'outlined' : 'text'}
                 >
@@ -202,7 +202,7 @@ const DashboardDefault = () => {
                 </Button>
                 <Button
                   size="small"
-                  onClick={() => setSlot('month')}
+                  onClick={(event) => { event.preventDefault(); setSlot('month') }}
                   color={slot === 'month' ? 'selectedPredict' : 'defaultPredict'}
                   variant={slot === 'month' ? 'outlined' : 'text'}
                 >
@@ -210,7 +210,7 @@ const DashboardDefault = () => {
                 </Button>
                 <Button
                   size="small"
-                  onClick={() => setSlot('3months')}
+                  onClick={(event) => { event.preventDefault(); setSlot('3months') }}
                   color={slot === '3months' ? 'selectedPredict' : 'defaultPredict'}
                   variant={slot === '3months' ? 'outlined' : 'text'}
                 >
@@ -219,13 +219,13 @@ const DashboardDefault = () => {
               </Stack>
             </Grid>
           </Grid>
-          <MainCard content={false} sx={{ mt: 1.5 }}>
-            <Box sx={{ pt: 1, pr: 2,}}>
-            <TradingChart data={candlesticks} predictMode={slot} trends={trendsForecasts} timeframe={timeframe} isOpen={isOpen}></TradingChart>
+          <MainCard content={false} sx={{ mt: 1.5, minHeight: '450px' }}>
+            <Box sx={{ pt: 1, pr: 2, }}>
+              <TradingChart data={candlesticks} predictMode={slot} trends={trendsForecasts}></TradingChart>
             </Box>
           </MainCard>
         </Grid>
-        <Grid item xs={1}  sx={{ display: { xs: 'block', sm: 'none', md: 'none', lg: 'none' } }} />
+        <Grid item xs={1} sx={{ display: { xs: 'block', sm: 'none', md: 'none', lg: 'none' } }} />
 
       </Grid>
     </>

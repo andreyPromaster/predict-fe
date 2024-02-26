@@ -267,8 +267,8 @@ export const TradingChart = props => {
     );
     useEffect(() => {
         resizeObserver.current = new ResizeObserver((entries) => {
-          const { width, height } = entries[0].contentRect;
-          chart.current.applyOptions({ width, height });
+          const { width } = entries[0].contentRect;
+          chart.current.applyOptions({ width });
           setTimeout(() => {
             chart.current.timeScale().fitContent();
           }, 0);

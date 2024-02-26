@@ -2,7 +2,6 @@ import { Box, Button, FormControl, InputAdornment, OutlinedInput } from '@mui/ma
 import { SearchOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 
-
 const Search = (props) => {
   const {onTickerCompleted} = props
   const [ticker, setTicker] = useState("");
