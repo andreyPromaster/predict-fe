@@ -26,9 +26,13 @@ const ticker = createSlice({
     tickerCandlesticksUploaded(state, action){
         state.candlesticks = action.payload
     },
+    predictsUploaded(state, action){
+        state.trendsForecasts = action.payload.trendsForecasts
+        state.categoricalForecasts = action.payload.categoricalForecasts
+    },
 }}
 );
 
 export default ticker.reducer;
 
-export const { tickerDataUploaded, tickerTopDealsUploaded, tickerCandlesticksUploaded } = ticker.actions;
+export const { tickerDataUploaded, tickerTopDealsUploaded, tickerCandlesticksUploaded, predictsUploaded } = ticker.actions;

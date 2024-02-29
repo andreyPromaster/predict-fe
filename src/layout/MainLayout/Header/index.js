@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { AppBar, IconButton, Toolbar, useMediaQuery } from '@mui/material';
+import { AppBar, IconButton, Toolbar, useMediaQuery, Typography } from '@mui/material';
 
 // project import
 import AppBarStyled from './AppBarStyled';
@@ -32,7 +32,6 @@ const Header = ({ open, handleDrawerToggle }) => {
       >
         {!open ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       </IconButton>
-      {/* <HeaderContent /> */}
     </Toolbar>
   );
 

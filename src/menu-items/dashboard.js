@@ -1,10 +1,9 @@
 // assets
-import { AreaChartOutlined, StockOutlined } from '@ant-design/icons';
-
+import { AreaChartOutlined, StockOutlined, SyncOutlined } from '@ant-design/icons';
 // icons
 const icons = {
   AreaChartOutlined, 
-  StockOutlined
+  StockOutlined, SyncOutlined
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
@@ -28,6 +27,14 @@ const dashboard = {
       type: 'item',
       url: '/deals',
       icon: icons.StockOutlined,
+      breadcrumbs: false
+    },
+    {
+      id: 'back',
+      title: 'Back to the site',
+      type: 'item',
+      url: 'https://solneta.com/',
+      icon: icons.SyncOutlined,
       breadcrumbs: false
     }
   ]

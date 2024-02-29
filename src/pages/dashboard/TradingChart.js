@@ -29,7 +29,6 @@ export const TradingChart = props => {
                     vertLines: { color: '#CCD0D1' },
                     horzLines: { color: '#CCD0D1' },
                 },
-                // autoSize: true,
                 height: 450,
                 timeScale: {
                     timeVisible: true,
@@ -38,7 +37,6 @@ export const TradingChart = props => {
                     locale: 'en-US',
                },
             });
-            let isShowMarker = false;
             const volumeSeries = chart.current.addHistogramSeries({
                 color: '#26a69a',
                 priceFormat: {
@@ -121,17 +119,12 @@ export const TradingChart = props => {
                     axisLabelVisible: true,
                     title: 'max price',
                 });
-                // const currentDate = moment.utc(props.trends.date);
-                // const nextDate = moment(currentDate).add(7, "days")
-                // for(currentDate.add(1, "days"); currentDate<nextDate; currentDate.add(1, "days")){
-                //     histData.push({time: currentDate.unix()})
-                // }                
-                // isShowMarker = true
             }
                     break; 
                 case "month": {
-                    const date = moment(props.trends.date);
-                    const nextMonth = moment(date).add(1, "months");
+                    const date = moment(data[data.length - 1].date);
+                    const lastPredictDate = moment(props.trends.date);
+                    const nextMonth = moment(lastPredictDate).add(1, "months");
                     const emptyDates = [];
                     for(date.add(1, "days"); date<nextMonth; date.add(1, "days")){
                         emptyDates.push({time: date.format('YYYY-MM-DD')})
@@ -177,8 +170,10 @@ export const TradingChart = props => {
                 }
                     break; 
                 case "3months": {
-                    const date = moment(props.trends.date);
-                    const nextMonth = moment(date).add(3, "months");
+                    const date = moment(data[data.length - 1].date);
+                    const lastPredictDate = moment(props.trends.date);
+                    const nextMonth = moment(lastPredictDate).add(3, "months");
+
                     const emptyDates = [];
                     for(date.add(1, "days"); date<nextMonth; date.add(1, "days")){
                         emptyDates.push({time: date.format('YYYY-MM-DD')})
@@ -238,22 +233,6 @@ export const TradingChart = props => {
                 }
             });
             volumeSeries.setData(volumeData)
-            if (isShowMarker){
-            series.setMarkers([
-                {
-                    time: histData[histData.length - 1].time,
-                    position: 'aboveBar',
-                    color: '#f68410',
-                    shape: 'circle',
-                    text: 'D',
-                },
-            ]);
-        }
-            // new ResizeObserver((entries) => {
-            //     if (entries.length === 0 || entries[0].target !== chartContainerRef.current) { return; }
-            //     const newRect = entries[0].contentRect;
-            //     chart.applyOptions({ height: newRect.height, width: newRect.width });
-            //   }).observe(chartContainerRef.current);
 
             chart.current.timeScale().fitContent();
             window.addEventListener('resize', handleResize);
@@ -263,7 +242,7 @@ export const TradingChart = props => {
                 chart.current.remove();
             };
         },
-        [data, props.predictMode]
+        [data, props.predictMode, props.trends]
     );
     useEffect(() => {
         resizeObserver.current = new ResizeObserver((entries) => {
