@@ -26,8 +26,8 @@ export const TradingChart = props => {
                     textColor,
                 },
                 grid: {
-                    vertLines: { color: '#CCD0D1' },
-                    horzLines: { color: '#CCD0D1' },
+                    vertLines: { color: '#CCD0D1', visible: false },
+                    horzLines: { color: '#CCD0D1', visible: true },
                 },
                 height: 450,
                 timeScale: {
