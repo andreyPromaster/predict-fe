@@ -7,7 +7,8 @@ const initialState = {
     trendsForecasts: {},
     categoricalForecasts: {},
     profile: {},
-    topDeals: []
+    topDeals: [],
+    availableTickers: []
 };
 
 const ticker = createSlice({
@@ -30,9 +31,12 @@ const ticker = createSlice({
         state.trendsForecasts = action.payload.trendsForecasts
         state.categoricalForecasts = action.payload.categoricalForecasts
     },
+    availableTickersUploaded(state, action){
+        state.availableTickers = action.payload
+    },
 }}
 );
 
 export default ticker.reducer;
 
-export const { tickerDataUploaded, tickerTopDealsUploaded, tickerCandlesticksUploaded, predictsUploaded } = ticker.actions;
+export const { tickerDataUploaded, tickerTopDealsUploaded, tickerCandlesticksUploaded, predictsUploaded, availableTickersUploaded } = ticker.actions;

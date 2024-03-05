@@ -1,4 +1,4 @@
-import { TIKERS_URL, TOP_WEEKLY_PREDIT_URL } from "./Urls"
+import { TIKERS_URL, TOP_WEEKLY_PREDIT_URL, AVAILABLE_TICKERS } from "./Urls"
 import axios from "axios";
 
 const client = axios.create();
@@ -20,6 +20,10 @@ export const fetchCategoricalForecast = (symbol, date) => {
     }
 };
 
+export const fetchAvailableTickers = () => {
+    return client.get(AVAILABLE_TICKERS)
+};
+
 export const fetchTopWeeklyForecast = (predictedFor) => {
     const params = {}
     if (typeof predictedFor !== "undefined") {
@@ -27,6 +31,7 @@ export const fetchTopWeeklyForecast = (predictedFor) => {
     }
     return client.get(TOP_WEEKLY_PREDIT_URL, { params: params })
 };
+
 
 export const fetchGraphData = (symbol, filters) => {
     return client.get(`${TIKERS_URL}/${symbol}`, { params: filters })

@@ -7,7 +7,6 @@ import {
   Grid,
   Chip,
   MenuItem,
-  Stack,
   TextField,
   Typography,
   Link,
@@ -145,14 +144,14 @@ const DashboardDefault = () => {
         <Grid item xs={12}>
           <Search onTickerCompleted={onTickerCompleted}></Search>
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3} >
+        <Grid item xs={12} sm={6} md={4} lg={4} >
           <WeeklyPredictCard />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3} >
+        <Grid item xs={12} sm={6} md={4} lg={4} >
           <MonthlyPredictCard />
         </Grid>
         {Object.keys(profile).length === 0 ?
-          <Grid item md={4} lg={6} sx={{ display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' } }} />
+          <Grid item md={4} lg={4} sx={{ display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' } }} />
           :
           <Grid item xs={12} md={4} lg={4} >
             <MainCard sx={{ minHeight: '220px' }} contentSX={{ p: 2 }}>
