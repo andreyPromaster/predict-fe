@@ -123,7 +123,7 @@ export const TradingChart = props => {
                     break; 
                 case "month": {
                     const date = moment(data[data.length - 1].date);
-                    const lastPredictDate = moment(props.trends.date);
+                    const lastPredictDate = moment(props.trends.execute_date);
                     const nextMonth = moment(lastPredictDate).add(1, "months");
                     const emptyDates = [];
                     for(date.add(1, "days"); date<nextMonth; date.add(1, "days")){
@@ -152,17 +152,17 @@ export const TradingChart = props => {
                     const high_1m = price_1m + 2 * fp_1m * props.trends["predict_err/b_1m"]
                     const low_1m = price_1m - 2 * fp_1m * props.trends["predict_err/b_1m"]
                     line1.setData([
-                        { time: props.trends.date, value: fp_high_1m },
+                        { time: props.trends.execute_date, value: fp_high_1m },
                         ...emptyDates,
                         { time: nextMonthDate, value: high_1m},
                     ])
                     line2.setData([
-                        { time: props.trends.date, value: fp_low_1m },
+                        { time: props.trends.execute_date, value: fp_low_1m },
                         ...emptyDates,
                         { time: nextMonthDate, value: low_1m },
                     ])
                     line3.setData([
-                        { time: props.trends.date, value: fp_1m },
+                        { time: props.trends.execute_date, value: fp_1m },
                         ...emptyDates,
                         { time: nextMonthDate, value: price_1m },
                     ])
@@ -171,7 +171,7 @@ export const TradingChart = props => {
                     break; 
                 case "3months": {
                     const date = moment(data[data.length - 1].date);
-                    const lastPredictDate = moment(props.trends.date);
+                    const lastPredictDate = moment(props.trends.execute_date);
                     const nextMonth = moment(lastPredictDate).add(3, "months");
 
                     const emptyDates = [];
@@ -201,17 +201,17 @@ export const TradingChart = props => {
                     const high_3m = price_3m + 2 * fp_3m * props.trends["predict_err/b_3m"]
                     const low_3m = price_3m - 2 * fp_3m * props.trends["predict_err/b_3m"]
                     line1.setData([
-                        { time: props.trends.date, value: fp_high_3m },
+                        { time: props.trends.execute_date, value: fp_high_3m },
                         ...emptyDates,
                         { time: nextMonthDate, value: high_3m},
                     ])
                     line2.setData([
-                        { time: props.trends.date, value: fp_low_3m },
+                        { time: props.trends.execute_date, value: fp_low_3m },
                         ...emptyDates,
                         { time: nextMonthDate, value: low_3m },
                     ])
                     line3.setData([
-                        { time: props.trends.date, value: fp_3m },
+                        { time: props.trends.execute_date, value: fp_3m },
                         ...emptyDates,
                         { time: nextMonthDate, value: price_3m },
                     ])

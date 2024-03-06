@@ -1,16 +1,15 @@
 // assets
-import { AreaChartOutlined, StockOutlined, SyncOutlined } from '@ant-design/icons';
+import { AreaChartOutlined, StockOutlined, LogoutOutlined } from '@ant-design/icons';
 // icons
 const icons = {
   AreaChartOutlined, 
-  StockOutlined, SyncOutlined
+  StockOutlined, LogoutOutlined
 };
-
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
 
 const dashboard = {
   id: 'group-dashboard',
-  title: 'Navigation',
+  title: '',
   type: 'group',
   children: [
     {
@@ -31,10 +30,10 @@ const dashboard = {
     },
     {
       id: 'back',
-      title: 'Back to the site',
+      title: 'Back to solneta.com',
       type: 'item',
       url: 'https://solneta.com/',
-      icon: icons.SyncOutlined,
+      icon: icons.LogoutOutlined,
       breadcrumbs: false
     }
   ]

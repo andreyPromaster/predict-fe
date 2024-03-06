@@ -97,7 +97,7 @@ const DashboardDefault = () => {
         const payload = { candlesticks, profile, trendsForecasts, categoricalForecasts }
         dispatch(tickerDataUploaded(payload))
         setTicker(symbol.trim().toUpperCase())
-        setPredictDate(trendsForecasts.date)
+        setPredictDate(trendsForecasts.execute_date)
       }).catch((error) => {
         console.log(error)
         if (error?.response?.status === 404) {
@@ -116,7 +116,7 @@ const DashboardDefault = () => {
     fetchTickerPredicts(ticker, date.format('YYYY-MM-DD')).then(([{ data: trendsForecasts }, { data: categoricalForecasts }]) => {
       const payload = { trendsForecasts, categoricalForecasts }
       dispatch(predictsUploaded(payload))
-      setPredictDate(trendsForecasts.date)
+      setPredictDate(trendsForecasts.execute_date)
     }).catch((error) => {
       console.log(error)
       if (error?.response?.status === 404) {
@@ -130,7 +130,7 @@ const DashboardDefault = () => {
   }
   useEffect(
     () => {
-      setPredictDate(trendsForecasts.date)
+      setPredictDate(trendsForecasts.execute_date)
     }, [predictDate])
 
   return (
@@ -255,6 +255,7 @@ const DashboardDefault = () => {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   disableFuture
+                  format={"DD-MM-YYYY"}
                   sx={{
                     mr: 1, boxShadow: 'none', '& .MuiInputBase-input': { py: 0.68, fontSize: '0.875rem', },
                   }}
