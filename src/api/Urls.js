@@ -1,4 +1,4 @@
-let host = "http://127.0.0.1:8002"
+let host = ""
 
 if (process.env.REACT_APP_BASE_URL){
     host = process.env.REACT_APP_BASE_URL
