@@ -38,33 +38,34 @@ const Deals = () => {
             dispatch(tickerTopDealsUploaded(response.data))
             setPredictDate(dayjs(response.data[0].forecast_timestamp).format('YYYY-MM-DD'))
         }).catch((error) => {
-          console.log(error)
+            console.log(error)
         })
-      }
-      useEffect(
+    }
+    useEffect(
         () => {
-        if (predicts.length !== 0) {
-          setPredictDate(dayjs(predicts[0].forecast_timestamp).format('YYYY-MM-DD'))
-        }
+            if (predicts.length !== 0) {
+                setPredictDate(dayjs(predicts[0].forecast_timestamp).format('YYYY-MM-DD'))
+            }
         }, [predictDate])
     return (
         <Grid container columnSpacing={2.75}>
             <Grid item container alignItems="center" justifyContent="space-between">
                 <Grid item xs={12}>
-                <Typography variant="h5">The top of weekly predicts </Typography>
+                    <Typography variant="h5">The top of weekly predicts </Typography>
                 </Grid>
-                <Grid item xs={12} sx={{mt:1}}>
-                <Chip label="Predicted for:" sx={{ mr: 1 }} />
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker 
-                  disableFuture
-                  sx={{
-                    mr: 1, boxShadow: 'none', '& .MuiInputBase-input': { py: 0.68, fontSize: '0.875rem', },
-                  }}
-                  value={dayjs(predictDate)}
-                  onChange={(value) => onPredictDateChanged(value)}
-                  />
-                </LocalizationProvider>
+                <Grid item xs={12} sx={{ mt: 1 }}>
+                    <Chip label="Predicted for:" sx={{ mr: 1 }} />
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                            format={"DD-MM-YYYY"}
+                            disableFuture
+                            sx={{
+                                mr: 1, boxShadow: 'none', '& .MuiInputBase-input': { py: 0.68, fontSize: '0.875rem', },
+                            }}
+                            value={dayjs(predictDate)}
+                            onChange={(value) => onPredictDateChanged(value)}
+                        />
+                    </LocalizationProvider>
                 </Grid>
             </Grid>
 
