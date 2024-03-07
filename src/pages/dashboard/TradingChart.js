@@ -2,7 +2,66 @@ import { createChart, ColorType } from 'lightweight-charts';
 import React, { useEffect, useRef } from 'react';
 import moment from "moment/moment";
 
+const createBaseLines = (series, high, low) => {
+    const color = '#ffcf40'
+    series.createPriceLine({
+        price: low,
+        color: color,
+        lineWidth: 3,
+        lineStyle: 2,
+        axisLabelVisible: true,
+        title: 'min price',
+    });
+    series.createPriceLine({
+        price: high,
+        color: color,
+        lineWidth: 3,
+        lineStyle: 2,
+        axisLabelVisible: true,
+        title: 'max price',
+    });
+}
 
+const createTrendsLines = (chart, data) => {
+    const color = '#ffcf40'
+    const line1 = chart.current.addLineSeries(
+        {
+            color: color,
+            lineWidth: 3,
+        })
+    const line2 = chart.current.addLineSeries(
+        {
+            color: color,
+            lineWidth: 3,
+        })
+    const line3 = chart.current.addLineSeries(
+        {
+            color: color,
+            lineWidth: 3,
+        })
+    const [line1Data, line2Data, line3Data] = data
+    line1.setData(line1Data)
+    line2.setData(line2Data)
+    line3.setData(line3Data)
+}
+
+const createAreaSeries = (chart, data) => {
+    const areaSeries = chart.current.addAreaSeries({
+        lastValueVisible: false, // hide the last value marker for this series
+        crosshairMarkerVisible: false, // hide the crosshair marker for this series
+        lineColor: 'transparent', // hide the line
+        topColor: 'rgba(255, 255, 255,0.6)',
+        bottomColor: 'rgba(255, 255, 255, 0.1)',
+    });
+    areaSeries.setData(data);
+}
+
+const getSelectedBars = (candleSticks, start, end) => {
+    return candleSticks.filter((item) => item.time > start && item.time < end).map(datapoint => ({
+        time: datapoint.time,
+        value: (datapoint.close + datapoint.open) / 2,
+    }));
+}
 export const TradingChart = props => {
     const {
         data,
@@ -26,8 +85,8 @@ export const TradingChart = props => {
                     textColor,
                 },
                 grid: {
-                    vertLines: { color: '#CCD0D1', visible: false },
-                    horzLines: { color: '#CCD0D1', visible: true },
+                    vertLines: { color: '#CCD0D1', visible: true },
+                    horzLines: { color: '#CCD0D1', visible: false },
                 },
                 height: 450,
                 timeScale: {
@@ -35,22 +94,22 @@ export const TradingChart = props => {
                 },
                 localization: {
                     locale: 'en-US',
-               },
+                },
             });
             const volumeSeries = chart.current.addHistogramSeries({
                 color: '#26a69a',
                 priceFormat: {
                     type: 'volume',
                 },
-                priceScaleId: '', 
+                priceScaleId: '',
                 scaleMargins: {
-                    top: 0.7, 
+                    top: 0.7,
                     bottom: 0,
                 },
             });
             volumeSeries.priceScale().applyOptions({
                 scaleMargins: {
-                    top: 0.7, 
+                    top: 0.7,
                     bottom: 0,
                 },
             });
@@ -61,16 +120,16 @@ export const TradingChart = props => {
             const histData = data.map((e) => {
                 const d = moment.utc(e.date);
                 return {
-                  time: d.unix(),
-                  value: e.volume,
-                  color: e.open < e.close ? '#26a69a'  : '#ef5350',
-                  open: e.open,
-                  high: e.high,
-                  close: e.close,
-                  low: e.low,
+                    time: d.unix(),
+                    value: e.volume,
+                    color: e.open < e.close ? '#26a69a' : '#ef5350',
+                    open: e.open,
+                    high: e.high,
+                    close: e.close,
+                    low: e.low,
                 }
             });
-            if (histData.length === 0){
+            if (histData.length === 0) {
                 const d = new Date()
                 histData.push({
                     time: Math.floor(d.getTime() / 1000),
@@ -81,155 +140,107 @@ export const TradingChart = props => {
                     value: 0
                 })
             }
-            if (Object.keys(props.trends).length !== 0){
-            switch (props.predictMode) {
-                case "day":{
-                    series.createPriceLine({
-                        price: props.trends.open * props.trends.predict_delta_min_1d,
-                        color: '#ffcf40',
-                        lineWidth: 3,
-                        lineStyle: 2, // LineStyle.Dashed
-                        axisLabelVisible: true,
-                        title: 'min price',
-                    });
-                    series.createPriceLine({
-                        price: props.trends.open * props.trends.predict_delta_max_1d,
-                        color: '#ffcf40',
-                        lineWidth: 3,
-                        lineStyle: 2, // LineStyle.Dashed
-                        axisLabelVisible: true,
-                        title: 'max price',
-                    });
-                }
-                    break;
-                case "week": {
-                series.createPriceLine({
-                    price: props.trends.open * props.trends.predict_delta_min_1w,
-                    color: '#ffcf40',
-                    lineWidth: 3,
-                    lineStyle: 2, // LineStyle.Dashed
-                    axisLabelVisible: true,
-                    title: 'min price',
-                });
-                series.createPriceLine({
-                    price: props.trends.open * props.trends.predict_delta_max_1w,
-                    color: '#ffcf40',
-                    lineWidth: 3,
-                    lineStyle: 2, // LineStyle.Dashed
-                    axisLabelVisible: true,
-                    title: 'max price',
-                });
-            }
-                    break; 
-                case "month": {
-                    const date = moment(data[data.length - 1].date);
-                    const lastPredictDate = moment(props.trends.execute_date);
-                    const nextMonth = moment(lastPredictDate).add(1, "months");
-                    const emptyDates = [];
-                    for(date.add(1, "days"); date<nextMonth; date.add(1, "days")){
-                        emptyDates.push({time: date.format('YYYY-MM-DD')})
+            if (Object.keys(props.trends).length !== 0) {
+                switch (props.predictMode) {
+                    case "day": {
+                        createBaseLines(series, props.trends.open * props.trends.predict_delta_max_1d, props.trends.open * props.trends.predict_delta_min_1d)
+                        const lastPredictDate = moment(props.trends.execute_date);
+                        const nextDay = moment(lastPredictDate).add(1, "days");
+                        createAreaSeries(chart, getSelectedBars(histData, lastPredictDate.unix(), nextDay.unix()))
                     }
-                    const nextMonthDate = nextMonth.format('YYYY-MM-DD');
-                    const line1 = chart.current.addLineSeries(
-                        {
-                        color: '#ffcf40',
-                        lineWidth: 3,
-                    })
-                    const line2 = chart.current.addLineSeries(
-                        {
-                        color: '#ffcf40',
-                        lineWidth: 3,
-                    })
-                    const line3 = chart.current.addLineSeries(
-                        {
-                        color: '#ffcf40',
-                        lineWidth: 3,
-                    })
-                    const fp_1m = props.trends.predict_b_1m * props.trends.open;
-                    const fp_high_1m = fp_1m + 2 * fp_1m * props.trends["predict_err/b_1m"]
-                    const fp_low_1m = fp_1m - 2 * fp_1m * props.trends["predict_err/b_1m"]
-                    const price_1m = props.trends.open * (props.trends["predict_b_1m"] + 130 * props.trends["predict_a_1m"])
-                    const high_1m = price_1m + 2 * fp_1m * props.trends["predict_err/b_1m"]
-                    const low_1m = price_1m - 2 * fp_1m * props.trends["predict_err/b_1m"]
-                    line1.setData([
-                        { time: props.trends.execute_date, value: fp_high_1m },
-                        ...emptyDates,
-                        { time: nextMonthDate, value: high_1m},
-                    ])
-                    line2.setData([
-                        { time: props.trends.execute_date, value: fp_low_1m },
-                        ...emptyDates,
-                        { time: nextMonthDate, value: low_1m },
-                    ])
-                    line3.setData([
-                        { time: props.trends.execute_date, value: fp_1m },
-                        ...emptyDates,
-                        { time: nextMonthDate, value: price_1m },
-                    ])
-
-                }
-                    break; 
-                case "3months": {
-                    const date = moment(data[data.length - 1].date);
-                    const lastPredictDate = moment(props.trends.execute_date);
-                    const nextMonth = moment(lastPredictDate).add(3, "months");
-
-                    const emptyDates = [];
-                    for(date.add(1, "days"); date<nextMonth; date.add(1, "days")){
-                        emptyDates.push({time: date.format('YYYY-MM-DD')})
+                        break;
+                    case "week": {
+                        createBaseLines(series, props.trends.open * props.trends.predict_delta_max_1w, props.trends.open * props.trends.predict_delta_min_1w)
+                        const lastPredictDate = moment(props.trends.execute_date);
+                        const nextDay = moment(lastPredictDate).add(7, "days");
+                        createAreaSeries(chart, getSelectedBars(histData, lastPredictDate.unix(), nextDay.unix()))
                     }
-                    const nextMonthDate = nextMonth.format('YYYY-MM-DD');
-                    const line1 = chart.current.addLineSeries(
-                        {
-                        color: '#ffcf40',
-                        lineWidth: 3,
-                    })
-                    const line2 = chart.current.addLineSeries(
-                        {
-                        color: '#ffcf40',
-                        lineWidth: 3,
-                    })
-                    const line3 = chart.current.addLineSeries(
-                        {
-                        color: '#ffcf40',
-                        lineWidth: 3,
-                    })
-                    const fp_3m = props.trends.predict_b_3m * props.trends.open;
-                    const fp_high_3m = fp_3m + 2 * fp_3m * props.trends["predict_err/b_3m"]
-                    const fp_low_3m = fp_3m - 2 * fp_3m * props.trends["predict_err/b_3m"]
-                    const price_3m = props.trends.open * (props.trends["predict_b_3m"] + 390 * props.trends["predict_a_3m"])
-                    const high_3m = price_3m + 2 * fp_3m * props.trends["predict_err/b_3m"]
-                    const low_3m = price_3m - 2 * fp_3m * props.trends["predict_err/b_3m"]
-                    line1.setData([
-                        { time: props.trends.execute_date, value: fp_high_3m },
-                        ...emptyDates,
-                        { time: nextMonthDate, value: high_3m},
-                    ])
-                    line2.setData([
-                        { time: props.trends.execute_date, value: fp_low_3m },
-                        ...emptyDates,
-                        { time: nextMonthDate, value: low_3m },
-                    ])
-                    line3.setData([
-                        { time: props.trends.execute_date, value: fp_3m },
-                        ...emptyDates,
-                        { time: nextMonthDate, value: price_3m },
-                    ])
+                        break;
+                    case "month": {
+                        const date = moment(data[data.length - 1].date);
+                        const lastPredictDate = moment(props.trends.execute_date);
+                        const nextMonth = moment(lastPredictDate).add(1, "months");
+                        const emptyDates = [];
+                        for (date.add(1, "days"); date < nextMonth; date.add(1, "days")) {
+                            emptyDates.push({ time: date.format('YYYY-MM-DD') })
+                        }
+                        const nextMonthDate = nextMonth.format('YYYY-MM-DD');
+                        const fp_1m = props.trends.predict_b_1m * props.trends.open;
+                        const fp_high_1m = fp_1m + 2 * fp_1m * props.trends["predict_err/b_1m"]
+                        const fp_low_1m = fp_1m - 2 * fp_1m * props.trends["predict_err/b_1m"]
+                        const price_1m = props.trends.open * (props.trends["predict_b_1m"] + 130 * props.trends["predict_a_1m"])
+                        const high_1m = price_1m + 2 * fp_1m * props.trends["predict_err/b_1m"]
+                        const low_1m = price_1m - 2 * fp_1m * props.trends["predict_err/b_1m"]
+
+                        createTrendsLines(chart, [
+                            [
+                                { time: props.trends.execute_date, value: fp_high_1m },
+                                ...emptyDates,
+                                { time: nextMonthDate, value: high_1m },
+                            ],
+                            [
+                                { time: props.trends.execute_date, value: fp_low_1m },
+                                ...emptyDates,
+                                { time: nextMonthDate, value: low_1m },
+                            ],
+                            [
+                                { time: props.trends.execute_date, value: fp_1m },
+                                ...emptyDates,
+                                { time: nextMonthDate, value: price_1m },
+                            ]
+                        ])
+                    }
+                        break;
+                    case "3months": {
+                        const date = moment(data[data.length - 1].date);
+                        const lastPredictDate = moment(props.trends.execute_date);
+                        const nextMonth = moment(lastPredictDate).add(3, "months");
+
+                        const emptyDates = [];
+                        for (date.add(1, "days"); date < nextMonth; date.add(1, "days")) {
+                            emptyDates.push({ time: date.format('YYYY-MM-DD') })
+                        }
+                        const nextMonthDate = nextMonth.format('YYYY-MM-DD');
+
+                        const fp_3m = props.trends.predict_b_3m * props.trends.open;
+                        const fp_high_3m = fp_3m + 2 * fp_3m * props.trends["predict_err/b_3m"]
+                        const fp_low_3m = fp_3m - 2 * fp_3m * props.trends["predict_err/b_3m"]
+                        const price_3m = props.trends.open * (props.trends["predict_b_3m"] + 390 * props.trends["predict_a_3m"])
+                        const high_3m = price_3m + 2 * fp_3m * props.trends["predict_err/b_3m"]
+                        const low_3m = price_3m - 2 * fp_3m * props.trends["predict_err/b_3m"]
+                        createTrendsLines(chart, [
+                            [
+                                { time: props.trends.execute_date, value: fp_high_3m },
+                                ...emptyDates,
+                                { time: nextMonthDate, value: high_3m },
+                            ],
+                            [
+                                { time: props.trends.execute_date, value: fp_low_3m },
+                                ...emptyDates,
+                                { time: nextMonthDate, value: low_3m },
+                            ],
+                            [
+                                { time: props.trends.execute_date, value: fp_3m },
+                                ...emptyDates,
+                                { time: nextMonthDate, value: price_3m },
+                            ]
+
+                        ])
+                    }
+                        break;
                 }
-                    break; 
             }
-        }
             series.setData(histData)
             const volumeData = data.map((e) => {
                 const d = moment.utc(e.date);
                 return {
-                  time: d.unix(),
-                  value: e.volume,
-                  color: e.open < e.close ? '#26a69a'  : '#ef5350',
-                  open: e.open,
-                  high: e.high,
-                  close: e.close,
-                  low: e.low,
+                    time: d.unix(),
+                    value: e.volume,
+                    color: e.open < e.close ? '#26a69a' : '#ef5350',
+                    open: e.open,
+                    high: e.high,
+                    close: e.close,
+                    low: e.low,
                 }
             });
             volumeSeries.setData(volumeData)
@@ -246,15 +257,15 @@ export const TradingChart = props => {
     );
     useEffect(() => {
         resizeObserver.current = new ResizeObserver((entries) => {
-          const { width } = entries[0].contentRect;
-          chart.current.applyOptions({ width });
-          setTimeout(() => {
-            chart.current.timeScale().fitContent();
-          }, 0);
+            const { width } = entries[0].contentRect;
+            chart.current.applyOptions({ width });
+            setTimeout(() => {
+                chart.current.timeScale().fitContent();
+            }, 0);
         });
         resizeObserver.current.observe(chartContainerRef.current);
-        return () => {resizeObserver.current.disconnect();}
-      }, []);
+        return () => { resizeObserver.current.disconnect(); }
+    }, []);
 
     return (
         <div

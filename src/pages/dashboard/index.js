@@ -128,10 +128,32 @@ const DashboardDefault = () => {
       setPredictDate(date.format('YYYY-MM-DD'))
     })
   }
+
   useEffect(
     () => {
       setPredictDate(trendsForecasts.execute_date)
     }, [predictDate])
+
+  useEffect(() => {
+    const defaultTicker = 'AAPL';
+    if (candlesticks.length === 0) {
+      const filters = { timeframe: '1d' }
+      fetchTickerData(defaultTicker, filters).then(([{ data: candlesticks }, { data: profile }, { data: trendsForecasts }, { data: categoricalForecasts }]) => {
+        const payload = { candlesticks, profile, trendsForecasts, categoricalForecasts }
+        dispatch(tickerDataUploaded(payload))
+        setTicker(defaultTicker)
+        setPredictDate(trendsForecasts.execute_date)
+      }).catch((error) => {
+        console.log(error)
+        if (error?.response?.status === 404) {
+          setErrorMessage(error?.response.data.detail)
+        }
+        else {
+          setErrorMessage("Unknown error")
+        }
+      })
+    }
+  }, [])
 
   return (
     <>
@@ -195,7 +217,7 @@ const DashboardDefault = () => {
         }
 
         <Grid item xs={12}>
-          <Grid container  rowSpacing={1} columnSpacing={3}  >
+          <Grid container rowSpacing={1} columnSpacing={3}  >
             <Grid item>
               <Chip label="Timeframe:" sx={{ mr: 1 }} />
               <TextField
